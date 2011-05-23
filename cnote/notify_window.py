@@ -302,24 +302,28 @@ class NotificationWindow(gtk.Window):
 
     def try_load_image(self):
         self.image = None
-        if 'image-data' in self.n.hints:
-            logging.debug('using image-data hint')
-            self.image = cnote.util.load_pixbuf_fromdata(
-                self.n.hints['image-data'], self.IMAGE_SIZE)
-        elif 'image_data' in self.n.hints:
-            logging.warning('using deprecated image_data hint')
-            self.image = cnote.util.load_pixbuf_fromdata(
-                self.n.hints['image_data'], self.IMAGE_SIZE)
-        elif 'image-path' in self.n.hints:
-            logging.debug('using image-path hint')
-            self.image = cnote.util.load_pixbuf_fromname(
-                self.n.hints['image-path'], self.IMAGE_SIZE)
-        elif len(self.n.icon) != 0:
-            logging.debug('using icon name')
+
+        # (hint-name, load-function, is-deprecated) in order of preference
+        items = [
+            ('image-data', cnote.util.load_pixbuf_fromdata, False),
+            ('image_data', cnote.util.load_pixbuf_fromdata, True),
+            ('image-path', cnote.util.load_pixbuf_fromname, False),
+            ('image_path', cnote.util.load_pixbuf_fromname, True),
+            ('icon_data', cnote.util.load_pixbuf_fromdata, True)
+            ]
+
+        for h in items:
+            if h[0] in self.n.hints:
+                logging.debug('using {0} for notification image'.format(h[0]))
+                if h[2]:
+                    logging.warn("'{0}' using deprecated hint '{1}'".format(
+                            self.n.name, h[0]))
+                self.image = h[1](self.n.hints[h[0]], self.IMAGE_SIZE)
+                if self.image != None:
+                    return
+
+        # if no hint was provided, fall back on the icon name
+        if len(self.n.icon) != 0:
+            logging.debug('using icon for notification image')
             self.image = cnote.util.load_pixbuf_fromname(self.n.icon,
-                                                         self.IMAGE_SIZE)
-        elif 'icon_data' in self.n.hints:
-            logging.warning("app: '{0}' using deprecated 'icon_data'".format(
-                    self.n.name))
-            self.image = cnote.util.load_pixbuf_fromdata(self.n.hints['data'],
                                                          self.IMAGE_SIZE)

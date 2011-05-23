@@ -1,0 +1,325 @@
+import gtk
+import glib
+import cnote
+import cairo
+import pango
+import pangocairo
+import logging
+import gconf
+
+
+class NotificationWindow(gtk.Window):
+
+    __gsignals__ = {
+        'expose-event' : 'override'
+        }
+
+    colors = {
+        'background': (.74, 0.80, 0.85, .80),
+        'title': (1.0, 1.0, 1.0, .90),
+        'body': (1.0, 1.0, 1.0, .90),
+        'shadow-urgency-0': (0.0, 0.0, 0.0, 0.5),
+        'shadow-urgency-1': (0.0, 0.0, 0.0, 0.5),
+        'shadow-urgency-2': (0.6, 0.0, 0.0, 0.5)
+        }
+
+    title_font = {
+        'family': 'Sans',
+        'style': pango.STYLE_NORMAL,
+        'variant': pango.VARIANT_NORMAL,
+        'weight': pango.WEIGHT_BOLD,
+        'stretch': pango.STRETCH_NORMAL,
+        'size': 8.0
+        }
+
+    body_font = {
+        'family': 'Sans',
+        'style': pango.STYLE_NORMAL,
+        'variant': pango.VARIANT_NORMAL,
+        'weight': pango.WEIGHT_NORMAL,
+        'stretch': pango.STRETCH_NORMAL,
+        'size': 7.2
+        }
+
+    CORNER_RADIUS = 8
+
+    MIN_WIDTH = 240
+    MAX_WIDTH = 240
+
+    MIN_HEIGHT = 64
+
+    SHADOW_WIDTH = 2
+    SHADOW_BLUR  = 25
+
+    TEXT_SPACING = 8
+
+    IMAGE_SIZE = 48
+
+    def __init__(self, n):
+        super(NotificationWindow, self).__init__()
+
+        self.n = n
+        self.close_cb = None
+        self.close_arg = None
+        self.timer = 0
+
+        self.set_property('skip-taskbar-hint', True)
+        self.set_property('accept-focus', False)
+        self.set_keep_above(True)
+        self.set_app_paintable(True)
+        self.set_decorated(False)
+        self.set_size_request(1, 1)
+
+        screen = self.get_screen()
+        argbmap = screen.get_rgba_colormap()
+
+        root = gtk.gdk.screen_get_default()
+        if root.supports_net_wm_hint('_NET_WORKAREA'):
+            prop = root.get_root_window().property_get('_NET_WORKAREA')
+            self.root = {
+                'x': prop[2][0],
+                'y': prop[2][1],
+                'w': prop[2][2],
+                'h': prop[2][3]
+                }
+        else:
+            self.root = {
+                'x': 0,
+                'y': 0,
+                'w': gtk.gdk.screen_width(),
+                'h': gtk.gdk.screen_height()
+                }
+
+        logging.debug("root window x:{0}->{1}, y:{2}->{3}".format(
+                self.root['x'], self.root['w'],
+                self.root['y'], self.root['h']))
+
+        if argbmap is not None:
+            self.set_colormap(argbmap)
+        else:
+            logging.warn("no alpha channel available")
+
+        # load font info from gconf
+        client = gconf.client_get_default()
+        self.title_font['family'] = client.get_string(
+            '/desktop/gnome/interface/font_name')
+        self.body_font['family'] = self.title_font['family']
+
+        self.image = None
+
+        self.surface = None
+        self.regenerate()
+
+    def update_from(self, n):
+        self.n = n
+        self.regenerate()
+        self.queue_draw()
+        self.start_timer()
+
+    def close(self, reason):
+        if self.close_cb:
+            self.close_cb(self.n.get_id(), reason)
+            self.destroy()
+        return False
+
+    def on_close(self, callback, arg):
+        self.close_cb = callback
+        self.close_arg = arg
+
+    def start_timer(self):
+        if self.n.resident:
+            return
+
+        self.stop_timer()
+        self.timer = glib.timeout_add_seconds(
+            self.n.timeout / 1000,
+            self.close,
+            cnote.Notification.CLOSED_EXPIRED)
+
+    def stop_timer(self):
+        if self.timer != 0:
+            glib.source_remove(self.timer)
+            self.timer = 0
+
+    def show(self):
+        self.start_timer()
+        super(NotificationWindow, self).show()
+        # allow notifications to be 'click through'
+        self.window.input_shape_combine_region(gtk.gdk.Region(), 0, 0)
+
+    def do_expose_event(self, arg):
+        cr = self.window.cairo_create()
+        cr.rectangle(arg.area.x, arg.area.y, arg.area.width, arg.area.height)
+        cr.clip()
+
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.set_source_surface(self.surface)
+        cr.paint()
+
+    def regenerate(self):
+        # padding is the transparent space around the notification, which
+        # the blurred shadow will bleed into
+        padding = 6 + self.SHADOW_WIDTH * 2
+        # dimensions of the notification
+        self.try_load_image()
+        width, height = self.resize_window_as_needed(padding)
+        # dimensions of the window (e.g. including padding)
+        win_width = 2 * padding + width
+        win_height = 2 * padding + height
+
+        # if no location was specified, do our own thing
+        location = self.n.location
+        if location[0] == -1 or True:
+            location = (self.root['x'] + self.root['w'] - win_width,
+                        self.root['y'])
+            self.set_gravity(gtk.gdk.GRAVITY_NORTH_EAST)
+
+        screen = self.get_screen()
+
+        self.move(location[0], location[1])
+        new_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32,
+                                         win_width, win_height)
+
+        text_offset = padding + self.TEXT_SPACING
+        text_width = (width - 2 * self.TEXT_SPACING)
+        if self.image != None:
+            text_offset += self.IMAGE_SIZE + self.TEXT_SPACING
+            text_width -= self.TEXT_SPACING
+            text_width -= self.IMAGE_SIZE
+
+        try:
+            # base transparent window
+            cr = pangocairo.CairoContext(cairo.Context(new_surface))
+            cr.set_operator(cairo.OPERATOR_SOURCE)
+            cr.set_source_rgba(0, 0, 0, 0)
+            cr.paint()
+
+            # urgency-based drop shadow
+            cr.set_source_rgba(*self.colors['shadow-urgency-{0}'.format(
+                        self.n.urgency)])
+            cnote.util.cairo_rounded_rect(cr, 1.0,
+                                          padding - self.SHADOW_WIDTH,
+                                          padding - self.SHADOW_WIDTH,
+                                          self.CORNER_RADIUS,
+                                          width + 2 * self.SHADOW_WIDTH,
+                                          height + 2 * self.SHADOW_WIDTH)
+            cr.fill()
+            cnote.cairo_blur.gaussian_blur(new_surface, self.SHADOW_BLUR)
+
+            # background
+            cr.set_source_rgba(*self.colors['background'])
+            cnote.util.cairo_rounded_rect(cr, 1.0, padding, padding, 8.0,
+                                          width, height)
+            cr.fill()
+
+            # summary
+            cr.set_line_width(1.0)
+            cr.set_operator(cairo.OPERATOR_SOURCE)
+            cr.set_source_rgba(*self.colors['title'])
+            cr.new_path()
+            cr.move_to(text_offset, padding + self.TEXT_SPACING)
+
+            layout = cr.create_layout()
+            layout.set_text(self.n.summary)
+            layout.set_width(pango.SCALE * text_width)
+            layout.set_font_description(self.get_font(self.title_font))
+            pangocairo.context_set_font_options(layout.get_context(),
+                                                screen.get_font_options())
+            cr.update_layout(layout)
+            cr.show_layout(layout)
+
+            # body
+            cr.set_source_rgba(*self.colors['body'])
+            cr.new_path()
+            cr.move_to(text_offset,
+                       padding + layout.get_pixel_size()[1] +
+                       int(self.TEXT_SPACING * 1.5))
+
+            layout.set_text(cnote.util.strip_markup(self.n.body))
+            layout.set_width(pango.SCALE * text_width)
+            layout.set_font_description(self.get_font(self.body_font))
+            pangocairo.context_set_font_options(layout.get_context(),
+                                                screen.get_font_options())
+            cr.update_layout(layout)
+            cr.show_layout(layout)
+
+            # image, if available
+            if self.image != None:
+                cr.set_operator(cairo.OPERATOR_OVER)
+                gdkcr = gtk.gdk.CairoContext(cr)
+                gdkcr.set_source_pixbuf(self.image,
+                                        padding + self.TEXT_SPACING,
+                                        padding + self.TEXT_SPACING)
+                gdkcr.paint_with_alpha(0.80)
+
+            self.surface = new_surface
+        except Exception as ex:
+            logging.critical(ex)
+
+    def resize_window_as_needed(self, padding):
+        text_width = self.MAX_WIDTH - 2 * self.TEXT_SPACING
+        if self.image != None:
+            text_width -= self.TEXT_SPACING
+            text_width -= self.IMAGE_SIZE
+
+        layout = pango.Layout(self.create_pango_context())
+        layout.set_font_description(self.get_font(self.title_font))
+        layout.set_text(self.n.summary)
+        layout.set_width(text_width * pango.SCALE)
+        t_width, t_height = layout.get_pixel_size()
+
+        layout.set_font_description(self.get_font(self.body_font))
+        layout.set_text(cnote.util.strip_markup(self.n.body))
+        layout.set_width(text_width * pango.SCALE)
+        b_width, b_height = layout.get_pixel_size()
+
+        width = 2 * self.TEXT_SPACING + (b_width if
+                                         b_width > t_width else t_width)
+        height = int(2.5 * self.TEXT_SPACING) + b_height + t_height
+
+        if self.image != None:
+            width += self.TEXT_SPACING + self.IMAGE_SIZE
+
+        if width < self.MIN_WIDTH:
+            width = self.MIN_WIDTH
+
+        if height < self.MIN_HEIGHT:
+            height = self.MIN_HEIGHT
+
+        logging.debug("size should be '{0}x{1}'".format(width, height))
+        self.resize(width + padding * 2, height + padding * 2)
+        return (width, height)
+
+    def get_font(self, hint):
+        fd = pango.FontDescription()
+        fd.set_family(hint['family'])
+        fd.set_style(hint['style'])
+        fd.set_variant(hint['variant'])
+        fd.set_weight(hint['weight'])
+        fd.set_stretch(hint['stretch'])
+        fd.set_size(int(hint['size'] * pango.SCALE))
+        return fd
+
+    def try_load_image(self):
+        self.image = None
+        if 'image-data' in self.n.hints:
+            logging.debug('using image-data hint')
+            self.image = cnote.util.load_pixbuf_fromdata(
+                self.n.hints['image-data'], self.IMAGE_SIZE)
+        elif 'image_data' in self.n.hints:
+            logging.warning('using deprecated image_data hint')
+            self.image = cnote.util.load_pixbuf_fromdata(
+                self.n.hints['image_data'], self.IMAGE_SIZE)
+        elif 'image-path' in self.n.hints:
+            logging.debug('using image-path hint')
+            self.image = cnote.util.load_pixbuf_fromname(
+                self.n.hints['image-path'], self.IMAGE_SIZE)
+        elif len(self.n.icon) != 0:
+            logging.debug('using icon name')
+            self.image = cnote.util.load_pixbuf_fromname(self.n.icon,
+                                                         self.IMAGE_SIZE)
+        elif 'icon_data' in self.n.hints:
+            logging.warning("app: '{0}' using deprecated 'icon_data'".format(
+                    self.n.name))
+            self.image = cnote.util.load_pixbuf_fromdata(self.n.hints['data'],
+                                                         self.IMAGE_SIZE)

@@ -1,0 +1,30 @@
+1. INTRODUCTION
+
+cnote is a configurable notification daemon which adheres to the Desktop 
+Notifications Specification [people.gnome.org/~mccann/docs/notification-spec].
+
+cnote is free software, released under the GNU GPL; see the LICENSE file for 
+details.
+
+2. REQUIRED 
+
+cnote depends on the following python modules:
+   * python-cairo
+   * python-gtk2
+   * python-dbus
+
+3. BUILDING
+
+To build cnote, you will additionally need:
+   * python-dev
+   * python-cairo-dev
+   * python-setuptools
+
+The only thing that needs to be built is the included C module:
+   * cd cnote-git/cnote/cairo_blur && make
+
+4. USING
+
+'python ./cnote-daemon.py' is sufficient to start cnote.  pass '--help' to
+list additional useful options.
+

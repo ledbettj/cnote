@@ -55,6 +55,8 @@ class NotificationWindow(gtk.Window):
 
     IMAGE_SIZE = 48
 
+    PADDING = SHADOW_WIDTH * 2 + 6
+
     def __init__(self, n):
         super(NotificationWindow, self).__init__()
 
@@ -159,7 +161,7 @@ class NotificationWindow(gtk.Window):
     def regenerate(self):
         # padding is the transparent space around the notification, which
         # the blurred shadow will bleed into
-        padding = 6 + self.SHADOW_WIDTH * 2
+        padding = self.PADDING
         # dimensions of the notification
         self.try_load_image()
         width, height = self.resize_window_as_needed(padding)
@@ -203,12 +205,14 @@ class NotificationWindow(gtk.Window):
                                           self.CORNER_RADIUS,
                                           width + 2 * self.SHADOW_WIDTH,
                                           height + 2 * self.SHADOW_WIDTH)
+
             cr.fill()
             cnote.cairo_blur.gaussian_blur(new_surface, self.SHADOW_BLUR)
 
             # background
             cr.set_source_rgba(*self.colors['background'])
-            cnote.util.cairo_rounded_rect(cr, 1.0, padding, padding, 8.0,
+            cnote.util.cairo_rounded_rect(cr, 1.0, padding, padding, 
+                                          self.CORNER_RADIUS,
                                           width, height)
             cr.fill()
 

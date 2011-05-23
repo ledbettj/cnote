@@ -18,7 +18,8 @@ debug_levels = {
 # acceptable arguments to --window-type
 window_types = {
     'default': cnote.NotificationWindow,
-    'ubuntu': cnote.UbuntuWindow
+    'ubuntu': cnote.UbuntuWindow,
+    'simple': cnote.SimpleWindow
 }
 
 parser = optparse.OptionParser()
@@ -35,7 +36,8 @@ parser.add_option("-d", "--debug-level", type="choice", dest="debug_level",
 
 parser.add_option("-w", "--window-type", type="choice", dest="window_type",
                   default="default", choices=[k for k in window_types],
-                  help="notification style: one of 'default,' or 'ubuntu.'")
+                  help="notification style: one of 'default,' 'simple',"
+                  " or 'ubuntu.'")
 
 (opts, args) = parser.parse_args()
 

@@ -1,7 +1,5 @@
 import cnote
 import logging
-import gtk
-import pango
 
 
 class UbuntuWindow(cnote.NotificationWindow):
@@ -19,5 +17,4 @@ class UbuntuWindow(cnote.NotificationWindow):
     SHADOW_WIDTH = 1
 
     def __init__(self, n):
-        logging.debug('new ubuntu window')
         super(UbuntuWindow, self).__init__(n)

@@ -26,6 +26,11 @@ The only thing that needs to be built is the included C module:
 
 4. USING
 
-'python ./cnote-daemon.py' is sufficient to start cnote.  pass '--help' to
-list additional useful options.
+'python ./cnote-daemon.py' is sufficient to start cnote.  pass '--help' to list
+ additional useful options.
 
+5. THEMES
+
+themes for cnote are json files ending with '.cnote-theme'.  Themes can modify
+ a notification's appearance in many ways, including colors, text style, size,
+ and location.  See some of the themes in the 'theme' directory for details.

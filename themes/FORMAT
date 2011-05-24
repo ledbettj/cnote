@@ -93,3 +93,7 @@ OTHER FIELDS:
   "padding"      -- size of the transparent area outside the notification;
                     this area is used for the shadow and it's blur.
 
+  "min_timeout"  -- minimum number of milliseconds to display a notification
+  "max_timeout"  -- maximum number of milliseconds to display a notification
+  "default_timeout" -- if no timeout is specified, the value in millisecions to
+  		       show the notification

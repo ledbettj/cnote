@@ -42,7 +42,7 @@ class Notification:
         self.category = None
         self.resident = False
         self.location = self.DEFAULT_LOCATION
-
+        self.timeout = int(timeout)
         # unpack any hints we might handle
         if 'urgency' in hints:
             self.urgency = int(hints['urgency'])
@@ -52,15 +52,6 @@ class Notification:
             self.resident = bool(hints['resident'])
         if 'x' in hints and 'y' in hints:
             self.location = (int(hints['x']), int(hints['y']))
-
-        # the spec says a timeout of 0 means no timeout --
-        # but isn't that what the 'resident' hint is for?
-        if timeout in [-1, 0]:
-            self.timeout = self.DEFAULT_TIMEOUT
-        elif timeout < self.MIN_TIMEOUT:
-            self.timeout = self.MIN_TIMEOUT
-        elif timeout > self.MAX_TIMEOUT:
-            self.timeout = self.MAX_TIMEOUT
 
     def set_id(self, nid):
         self.nid = nid

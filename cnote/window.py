@@ -19,6 +19,8 @@ class NotificationWindow(gtk.Window):
         self.t = theme
 
         self.n = n
+        self.fix_timeout()
+
         self.close_cb = None
         self.close_arg = None
         self.timer = 0
@@ -64,11 +66,27 @@ class NotificationWindow(gtk.Window):
         self.surface = None
         self.regenerate()
 
+    def fix_timeout(self):
+        timeout = self.n.timeout
+        # the spec says a timeout of 0 means no timeout --
+        # but isn't that what the 'resident' hint is for?
+        if timeout in [-1, 0]:
+            timeout = self.t['default_timeout']
+        elif timeout < self.t['min_timeout']:
+            timeout = self.t['min_timeout']
+        elif timeout > self.t['max_timeout']:
+            timeout = self.t['max_timeout']
+
+        self.n.timeout = timeout
+
     def update_from(self, n):
         self.n = n
+        self.fix_timeout()
         self.regenerate()
-        self.queue_draw()
-        self.start_timer()
+        # only perform the following if we already started the timer
+        if self.timer != 0:
+            self.queue_draw()
+            self.start_timer()
 
     def close(self, reason):
         if self.close_cb:

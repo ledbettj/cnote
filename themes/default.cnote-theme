@@ -42,5 +42,9 @@
     "shadow_blur" : 25,
     "text_spacing": 8,
     "image_size": 48,
-    "padding": 10
+    "padding": 10,
+
+    "default_timeout": 8000,
+    "min_timeout": 7000,
+    "max_timeout": 10000
 }

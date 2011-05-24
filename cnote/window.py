@@ -117,7 +117,7 @@ class NotificationWindow(gtk.Window):
         self.start_timer()
         super(NotificationWindow, self).show()
         # allow notifications to be 'click through'
-        if self.t['click_through'] == True:
+        if self.t['click_through']:
             self.window.input_shape_combine_region(gtk.gdk.Region(), 0, 0)
 
     def do_expose_event(self, arg):
@@ -133,8 +133,9 @@ class NotificationWindow(gtk.Window):
         # padding is the transparent space around the notification, which
         # the blurred shadow will bleed into
         padding = self.t['padding']
+        if self.t['show_image']:
+            self.try_load_image()
         # dimensions of the notification
-        self.try_load_image()
         width, height = self.resize_window_as_needed(padding)
         # dimensions of the window (e.g. including padding)
         win_width = 2 * padding + width
@@ -142,7 +143,7 @@ class NotificationWindow(gtk.Window):
 
         # if no location was specified, do our own thing
         location = self.n.location
-        if location[0] == -1 or self.t['force_location'] == True:
+        if location[0] == -1 or self.t['force_location']:
             d = {
                 'screen_x': self.root['x'],
                 'screen_y': self.root['y'],

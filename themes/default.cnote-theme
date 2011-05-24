@@ -41,6 +41,7 @@
     "shadow_width": 2,
     "shadow_blur" : 25,
     "text_spacing": 8,
+    "show_image": true,
     "image_size": 48,
     "padding": 10,
 

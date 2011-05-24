@@ -87,6 +87,9 @@ OTHER FIELDS:
   "text_spacing" -- the spacing between text elements as well as the image
                     in the notification.
 
+  "show_image"   -- true or false; determines whether the notification should
+  		    display a supplied image.
+
   "image_size"   -- the size to scale the notification image to, if an image
                     is supplied.
 

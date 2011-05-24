@@ -5,6 +5,10 @@
 
     "override": "default",
 
+    "force_location": true,
+    "location": [1, "(screen_x + screen_w - win_w) / 2",
+    		 "(screen_y + screen_h - win_h) / 2"],
+
     "body_font": {
         "family": "Sans",
         "size": 16,

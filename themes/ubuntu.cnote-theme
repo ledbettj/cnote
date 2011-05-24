@@ -2,6 +2,8 @@
     "name": "ubuntu",
     "author": "John Ledbetter <john.ledbetter@gmail.com>",
     "version": "1.0",
+    "description": "based on Ubuntu's notify-osd appearance.",
+
     "override": "default",
 
     "colors": {

@@ -2,6 +2,7 @@
     "name": "default",
     "author": "John Ledbetter <john.ledbetter@gmail.com>",
     "version": "1.0",
+    "description": "The default cnote theme.",
 
     "colors": {
         "background": [ 0.74, 0.80, 0.84, 0.80 ],

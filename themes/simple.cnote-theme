@@ -2,6 +2,8 @@
     "name": "simple",
     "author": "John Ledbetter <john.ledbetter@gmail.com>",
     "version": "1.0",
+    "description": "a simple theme, for use without desktop compositing.",
+
     "override": "default",
 
     "colors": {

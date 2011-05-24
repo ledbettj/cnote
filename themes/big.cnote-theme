@@ -2,6 +2,7 @@
     "name": "big",
     "author": "John Ledbetter <john.ledbetter@gmail.com>",
     "version": "1.0",
+    "description": "a big, ugly theme with notifications centered.",
 
     "override": "default",
 

@@ -8,6 +8,7 @@ SUGGESTED FIELDS:
   "author"    -- name of the theme's author.  This field is currently not used,
 	      	     but is helpful to anyone inspecting the file.
   "version"   -- version of this theme.  Also currently not used.
+  "description" -- information about this theme.  Not used.
 
   "override"  -- specifies the theme to use for values not found in this theme.
                  if a theme does not specify all possible fields, it must

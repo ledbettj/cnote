@@ -1,0 +1,21 @@
+{
+    "name": "simple",
+    "author": "John Ledbetter <john.ledbetter@gmail.com>",
+    "version": "1.0",
+    "override": "default",
+
+    "colors": {
+        "background": [ 0.74, 0.80, 0.84, 1.0 ],
+        "body": [ 1.0, 1.0, 1.0, 1.0 ],
+        "shadow-urgency-0": [ 0.0, 0.0, 0.0, 1.0 ],
+        "shadow-urgency-1": [ 0.0, 0.0, 0.0, 1.0 ],
+        "shadow-urgency-2": [ 0.60, 0.0, 0.0, 1.0 ],
+        "title": [ 1.0, 1.0, 1.0, 1.0 ]
+    },
+
+    "shadow_width": 0,
+    "shadow_blur" : 0,
+    "corner_radius": 0,
+    "padding": 0
+    
+}

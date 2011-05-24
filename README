@@ -12,6 +12,7 @@ cnote depends on the following python modules:
    * python-cairo
    * python-gtk2
    * python-dbus
+   * python-simplejson
 
 3. BUILDING
 

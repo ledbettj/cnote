@@ -12,15 +12,9 @@ debug_levels = {
     'info': logging.INFO,
     'warning': logging.WARNING,
     'error': logging.ERROR,
-    'critical': logging.CRITICAL
     }
 
-# acceptable arguments to --window-type
-window_types = {
-    'default': cnote.NotificationWindow,
-    'ubuntu': cnote.UbuntuWindow,
-    'simple': cnote.SimpleWindow
-}
+themes = cnote.ThemeManager('./themes')
 
 parser = optparse.OptionParser()
 
@@ -31,13 +25,11 @@ parser.add_option("-r", "--replace", action="store_true", default=False,
 parser.add_option("-d", "--debug-level", type="choice", dest="debug_level",
                   default="warning", choices=[k for k in debug_levels],
                   help="level of debugging information to print to stderr: "
-                  "'debug,' 'info,' 'warning' (default), 'error,' or"
-                  " 'critical.'")
+                  "'debug,' 'info,' 'warning' (default), or 'error.'")
 
-parser.add_option("-w", "--window-type", type="choice", dest="window_type",
-                  default="default", choices=[k for k in window_types],
-                  help="notification style: one of 'default,' 'simple',"
-                  " or 'ubuntu.'")
+parser.add_option("-t", "--theme", type="choice", dest="theme",
+                  default="default", choices=themes.list_themes(),
+                  help="notification theme")
 
 (opts, args) = parser.parse_args()
 
@@ -48,7 +40,7 @@ logging.basicConfig(level=debug_levels[opts.debug_level])
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 logging.info("starting dbus service")
-manager = cnote.NotificationManager(window_types[opts.window_type])
+manager = cnote.NotificationManager(themes.get_theme(opts.theme))
 service = cnote.NotificationService(manager)
 
 gtk.main()

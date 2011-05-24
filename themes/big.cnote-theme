@@ -6,6 +6,15 @@
 
     "override": "default",
 
+    "colors": {
+        "background": [ 1.0, 1.0, 1.0, 0.30 ],
+        "body": [ 0.0, 0.0, 0.0, 0.90 ],
+        "title": [ 0.0, 0.0, 0.0, 0.90 ],
+        "shadow-urgency-0": [ 0.0, 0.0, 0.0, 0.3 ],
+        "shadow-urgency-1": [ 0.0, 0.0, 0.0, 0.3 ],
+        "shadow-urgency-2": [ 0.0, 0.0, 0.0, 0.3 ]
+    },
+
     "force_location": true,
     "location": [1, "(screen_x + screen_w - win_w) / 2",
     		 "(screen_y + screen_h - win_h) / 2"],
@@ -18,7 +27,6 @@
         "variant": 0,
         "weight": 400
     },
-
     "title_font": {
         "family": "Sans",
         "size": 18,
@@ -32,8 +40,12 @@
     "max_width": 480,
     "min_height": 144,
     "shadow_width": 2,
-    "shadow_blur" : 25,
+    "shadow_blur" : 0,
     "text_spacing": 8,
+
+    "show_image": true,
     "image_size": 128,
+    "image_opacity": 0.50,
+
     "padding": 10
 }

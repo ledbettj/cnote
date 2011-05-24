@@ -44,6 +44,7 @@
     "text_spacing": 8,
     "show_image": true,
     "image_size": 48,
+    "image_opacity": 0.80,
     "padding": 10,
 
     "default_timeout": 8000,

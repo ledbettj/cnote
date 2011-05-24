@@ -94,6 +94,8 @@ OTHER FIELDS:
   "image_size"   -- the size to scale the notification image to, if an image
                     is supplied.
 
+  "image_opacity"-- the alpha component used when drawing the image
+
   "padding"      -- size of the transparent area outside the notification;
                     this area is used for the shadow and it's blur.
 

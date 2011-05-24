@@ -235,7 +235,7 @@ class NotificationWindow(gtk.Window):
                 gdkcr.set_source_pixbuf(self.image,
                                         padding + self.t['text_spacing'],
                                         padding + self.t['text_spacing'])
-                gdkcr.paint_with_alpha(0.80)
+                gdkcr.paint_with_alpha(self.t['image_opacity'])
 
             self.surface = new_surface
         except Exception as ex:

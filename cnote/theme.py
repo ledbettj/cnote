@@ -23,7 +23,7 @@ class ThemeManager:
         for theme_name in self.themes:
             logging.debug(theme_name)
             theme = self.themes[theme_name]
-            if theme.get('override') != None:
+            if theme.has('override'):
                 theme.set_base(self.themes[theme['override']])
 
     def get_theme(self, name):
@@ -47,7 +47,12 @@ class Theme:
         elif self.base != None:
             return self.base.get(k)
         else:
+            logging.warning("no key '{0}' in theme '{1}'".format(
+                    k, self.settings['name']))
             return None
+
+    def has(self, k):
+        return k in self.settings or (self.base != None and k in self.base)
 
     def set(self, k, v):
         self.settings[k] = v

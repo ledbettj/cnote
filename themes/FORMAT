@@ -1,0 +1,95 @@
+
+REQUIRED FIELDS:
+
+  "name"      -- name of the theme.  This must be unique.
+
+SUGGESTED FIELDS:
+
+  "author"    -- name of the theme's author.  This field is currently not used,
+	      	     but is helpful to anyone inspecting the file.
+  "version"   -- version of this theme.  Also currently not used.
+
+  "override"  -- specifies the theme to use for values not found in this theme.
+                 if a theme does not specify all possible fields, it must
+                 override a theme which specifies the missing fields.  It is
+                 suggested to always override the 'default' theme, which will
+                 specify all required fields.
+
+OTHER FIELDS:
+
+  "colors"    -- an object describing the colors of various parts of a
+                 notification, in the format [ r, g, b, a].  If this field is
+                 present, it must contain all of the below fields:  
+                   "background"
+                   "body"
+                   "title"
+                   "shadow-urgency-0"
+                   "shadow-urgency-0"
+                   "shadow-urgency-0"
+
+  "body_font" -- an object describing the attributes of the font used for the
+                 body text of the notification.  If this field is present,
+                 it must contain all of the below fields:
+                   "family"
+                   "size"
+                   "stretch"
+                   "style"
+                   "variant"
+                   "weight"
+
+  "title_font"-- an object describing the attributes of the font used for the
+                 headline text of the notification.  If this field is present,
+                 it must contain all of the below fields:
+                   "family"
+                   "size"
+                   "stretch"
+                   "style"
+                   "variant"
+                   "weight"
+
+  "force_location" -- if true, ignore the location specified by the
+                      notification's sender, and instead use the theme's
+                      default location.
+
+  "location"      -- a list specifying the notification's location, in the 
+                     format [gravity, "x_location_calc", "y_location_calc"].
+                     The following may be used in the location calculations:
+                       screen_x, screen_y -- the (X,Y) values of the screen's
+                                             top left coordinate.
+                       screen_w, screen_h -- the width and height of the screen
+                                             such that the bottom right corner
+                                             is located at (X+W,Y+H)
+                       win_w, win_h       -- the width and height of the 
+                                             notification window
+
+  "click_through" -- if true, the window will not interact with the user, 
+                     and any mouse clicks on the window will be passed through
+                     to the window below.
+
+  "corner_radius" -- the size of the arc to use as the corner of the
+                     notification's rounded window.
+
+  "min_width"    -- the minimum width of the notification.  If it would be 
+                    smaller, it is padded to this width.
+
+  "max_width"    -- the maximum width of the notification.  If it would be 
+                    larger, it is shrunk to this width and the height grows
+                    instead.
+
+  "min_height"   -- the minimum height of the notification.  If it would be 
+                    smaller, it is padded to this height.
+
+  "shadow_width" -- the width of the shadow drawn outside the notification
+                    in the padding area.
+
+  "shadow_blur"  -- the radius of the gaussian blur used to blur the shadow.
+
+  "text_spacing" -- the spacing between text elements as well as the image
+                    in the notification.
+
+  "image_size"   -- the size to scale the notification image to, if an image
+                    is supplied.
+
+  "padding"      -- size of the transparent area outside the notification;
+                    this area is used for the shadow and it's blur.
+

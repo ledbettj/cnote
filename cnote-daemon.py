@@ -9,7 +9,11 @@ import xdg.BaseDirectory
 
 # configure logging to log warnings/errors until the --debug-level is parsed,
 # in case things go wrong during theme loading
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.WARNING,
+                    format='%(asctime)s: %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %I:%M:%S %p',
+                    filename=os.path.join(xdg.BaseDirectory.xdg_cache_home,
+                                          'cnote.log'))
 
 # acceptable arguments to --debug-level
 debug_levels = {

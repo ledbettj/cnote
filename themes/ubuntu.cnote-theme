@@ -14,8 +14,6 @@
     },
 
     "force_location": true,
-    "location": [ 3, "screen_x + screen_w - win_w", "screen_y" ],
-
     "shadow_width": 1,
     "shadow_blur" : 12
 }

@@ -99,7 +99,8 @@ class NotificationWindow(gtk.Window):
         self.start_timer()
         super(NotificationWindow, self).show()
         # allow notifications to be 'click through'
-        self.window.input_shape_combine_region(gtk.gdk.Region(), 0, 0)
+        if self.t['click_through'] == True:
+            self.window.input_shape_combine_region(gtk.gdk.Region(), 0, 0)
 
     def do_expose_event(self, arg):
         cr = self.window.cairo_create()
@@ -124,21 +125,18 @@ class NotificationWindow(gtk.Window):
         # if no location was specified, do our own thing
         location = self.n.location
         if location[0] == -1 or self.t['force_location'] == True:
-            if self.t.has('location'):
-                d = {
-                    'screen_x': self.root['x'],
-                    'screen_y': self.root['y'],
-                    'screen_w': self.root['w'],
-                    'screen_h': self.root['h'],
-                    'win_w': win_width,
-                    'win_h': win_height
-                    }
-                # loc_data is [gravity, x_expr, y_expr]
-                loc_data = self.t['location']
-                location = (eval(loc_data[1], d), eval(loc_data[2], d))
-                self.set_gravity(loc_data[0])
-            else:
-                location = (0, 0)
+            d = {
+                'screen_x': self.root['x'],
+                'screen_y': self.root['y'],
+                'screen_w': self.root['w'],
+                'screen_h': self.root['h'],
+                'win_w': win_width,
+                'win_h': win_height
+                }
+            # loc_data is [gravity, x_expr, y_expr]
+            loc_data = self.t['location']
+            location = (eval(loc_data[1], d), eval(loc_data[2], d))
+            self.set_gravity(loc_data[0])
 
         screen = self.get_screen()
 

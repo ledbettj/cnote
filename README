@@ -30,8 +30,17 @@ The only thing that needs to be built is the included C module:
 'python ./cnote-daemon.py' is sufficient to start cnote.  pass '--help' to list
  additional useful options.
 
+If you want to make cnote the default notification service, you can do the
+following (pending an actual installation script/tool):
+  * copy any themes to somewhere cnote should find them, such as 
+    /usr/local/share/cnote/themes/ or ~/.local/share/cnote/themes/
+  * edit /usr/share/dbus-1/services/org.freedesktop.Notification.services
+    to launch cnote:
+    Exec=/your/path/to/cnote-daemon.py
+
 5. THEMES
 
 themes for cnote are json files ending with '.cnote-theme'.  Themes can modify
- a notification's appearance in many ways, including colors, text style, size,
- and location.  See some of the themes in the 'theme' directory for details.
+a notification's appearance in many ways, including colors, text style, size,
+and location.  See FORMAT as well as the existing themes in the 'theme'
+directory for details.

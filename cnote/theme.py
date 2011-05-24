@@ -5,18 +5,24 @@ import logging
 
 class ThemeManager:
 
-    def __init__(self, base_dir):
-        self.base_dir = base_dir
+    def __init__(self, base_dirs):
+        self.base_dirs = base_dirs
         self.themes = {}
         self.load_themes()
 
     def load_themes(self):
-        for root, dirs, files in os.walk(self.base_dir):
-            file_list = [os.path.join(root, f) for f in files
-                         if f.endswith('.cnote-theme')]
-            for f in file_list:
-                theme = Theme(f)
-                self.themes[theme['name']] = theme
+        for base_dir in self.base_dirs:
+            for root, dirs, files in os.walk(base_dir):
+                file_list = [os.path.join(root, f) for f in files
+                             if f.endswith('.cnote-theme')]
+                for f in file_list:
+                    theme = Theme(f)
+                    theme_name = theme['name']
+                    if theme_name not in self.themes:
+                        self.themes[theme_name] = theme
+                    else:
+                        logging.warning(
+                            "ignoring duplicate theme {0}".format(theme_name))
         self.resolve_bases()
 
     def resolve_bases(self):

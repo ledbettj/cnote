@@ -5,6 +5,11 @@ import cnote
 import logging
 import optparse
 import os
+import xdg.BaseDirectory
+
+# configure logging to log warnings/errors until the --debug-level is parsed,
+# in case things go wrong during theme loading
+logging.basicConfig(level=logging.WARNING)
 
 # acceptable arguments to --debug-level
 debug_levels = {
@@ -14,8 +19,15 @@ debug_levels = {
     'error': logging.ERROR,
     }
 
-themes = cnote.ThemeManager('./themes')
+# where to find themes, in order of preference
+theme_dirs = [
+    os.path.join(xdg.BaseDirectory.xdg_data_home, 'cnote', 'themes'),
+    '/usr/share/cnote/themes',
+    '/usr/local/share/cnote/themes',
+    './themes'
+    ]
 
+themes = cnote.ThemeManager(theme_dirs)
 parser = optparse.OptionParser()
 
 parser.add_option("-r", "--replace", action="store_true", default=False,
@@ -36,7 +48,7 @@ parser.add_option("-t", "--theme", type="choice", dest="theme",
 if opts.replace:
     os.system("killall notify-osd ; killall notification-daemon")
 
-logging.basicConfig(level=debug_levels[opts.debug_level])
+logging.getLogger().setLevel(debug_levels[opts.debug_level])
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 logging.info("starting dbus service")

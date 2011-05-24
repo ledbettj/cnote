@@ -13,6 +13,7 @@ cnote depends on the following python modules:
    * python-gtk2
    * python-dbus
    * python-simplejson
+   * python-xdg
 
 3. BUILDING
 

@@ -6,6 +6,8 @@ import logging
 import optparse
 import os
 import xdg.BaseDirectory
+import sys
+
 
 # configure logging to log warnings/errors until the --debug-level is parsed,
 # in case things go wrong during theme loading
@@ -47,7 +49,24 @@ parser.add_option("-t", "--theme", type="choice", dest="theme",
                   default="default", choices=themes.list_themes(),
                   help="notification theme")
 
+parser.add_option("-l", "--list-themes", action="store_true", default=False,
+                  dest="list_themes",
+                  help="list available cnote themes and exit.")
+
 (opts, args) = parser.parse_args()
+
+if opts.list_themes:
+    items = themes.list_themes()
+    items.sort()
+    for tn in items:
+        t = themes.get_theme(tn)
+        print("* {0}-{2}\n"
+              "    author: {1}\n"
+              "    info:   {3}\n".format(tn,
+                                         t['author'],
+                                         t['version'],
+                                         t['description']))
+    sys.exit(0)
 
 if opts.replace:
     os.system("killall notify-osd ; killall notification-daemon")

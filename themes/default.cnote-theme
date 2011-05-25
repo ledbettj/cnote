@@ -49,5 +49,7 @@
 
     "default_timeout": 8000,
     "min_timeout": 7000,
-    "max_timeout": 10000
+    "max_timeout": 10000,
+
+    "strip_markup": true
 }

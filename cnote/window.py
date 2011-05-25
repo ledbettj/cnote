@@ -220,7 +220,11 @@ class NotificationWindow(gtk.Window):
                        padding + layout.get_pixel_size()[1] +
                        int(self.t['text_spacing'] * 1.5))
 
-            layout.set_text(cnote.util.strip_markup(self.n.body))
+            if self.t['strip_markup']:
+                layout.set_text(cnote.util.strip_markup(self.n.body))
+            else:
+                layout.set_markup(self.n.body)
+
             layout.set_width(pango.SCALE * text_width)
             layout.set_font_description(self.get_font(self.t['body_font']))
             pangocairo.context_set_font_options(layout.get_context(),
@@ -254,7 +258,10 @@ class NotificationWindow(gtk.Window):
         t_width, t_height = layout.get_pixel_size()
 
         layout.set_font_description(self.get_font(self.t['body_font']))
-        layout.set_text(cnote.util.strip_markup(self.n.body))
+        if self.t['strip_markup']:
+            layout.set_text(cnote.util.strip_markup(self.n.body))
+        else:
+            layout.set_markup(self.n.body)
         layout.set_width(text_width * pango.SCALE)
         b_width, b_height = layout.get_pixel_size()
 

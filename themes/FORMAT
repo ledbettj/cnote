@@ -103,3 +103,6 @@ OTHER FIELDS:
   "max_timeout"  -- maximum number of milliseconds to display a notification
   "default_timeout" -- if no timeout is specified, the value in millisecions to
   		       show the notification
+
+  "strip_markup" -- if true, remove any markup in the body text of the 
+                    notification

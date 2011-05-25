@@ -1,11 +1,19 @@
 import simplejson as json
 import os
 import logging
+import xdg.BaseDirectory
 
 
 class ThemeManager:
 
-    def __init__(self, base_dirs):
+    DEFAULT_DIRS = [
+        os.path.join(xdg.BaseDirectory.xdg_data_home, 'cnote', 'themes'),
+        '/usr/share/cnote/themes',
+        '/usr/local/share/cnote/themes',
+        './themes'
+        ]
+
+    def __init__(self, base_dirs = DEFAULT_DIRS):
         self.base_dirs = base_dirs
         self.themes = {}
         self.load_themes()

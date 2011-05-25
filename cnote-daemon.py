@@ -25,15 +25,7 @@ debug_levels = {
     'error': logging.ERROR,
     }
 
-# where to find themes, in order of preference
-theme_dirs = [
-    os.path.join(xdg.BaseDirectory.xdg_data_home, 'cnote', 'themes'),
-    '/usr/share/cnote/themes',
-    '/usr/local/share/cnote/themes',
-    './themes'
-    ]
-
-themes = cnote.ThemeManager(theme_dirs)
+themes = cnote.ThemeManager()
 parser = optparse.OptionParser()
 
 parser.add_option("-r", "--replace", action="store_true", default=False,

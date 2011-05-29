@@ -75,7 +75,13 @@ class Theme:
 
     def load(self):
         f = open(self.filename, 'r')
-        self.settings = json.load(f)
+
+        try:
+            self.settings = json.load(f)
+        except json.JSONDecodeError as err:
+            logging.error("failed to load theme from {0}: {1}".format(
+                    self.filename, err))
+
         f.close()
 
     def __getitem__(self, index):

@@ -13,7 +13,7 @@ class ThemeManager:
         './themes'
         ]
 
-    def __init__(self, base_dirs = DEFAULT_DIRS):
+    def __init__(self, base_dirs=DEFAULT_DIRS):
         self.base_dirs = base_dirs
         self.themes = {}
         self.load_themes()
@@ -38,7 +38,13 @@ class ThemeManager:
             logging.debug(theme_name)
             theme = self.themes[theme_name]
             if 'override' in theme:
-                theme.set_base(self.themes[theme['override']])
+                base_name = theme['override']
+                if base_name in self.themes:
+                    theme.set_base(self.themes[theme['override']])
+                else:
+                    logging.error('theme {0} overrides {1},'
+                                  ' but {1} not found'.format(theme_name,
+                                                              base_name))
 
     def get_theme(self, name):
         return self.themes[name]

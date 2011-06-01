@@ -67,7 +67,10 @@ logging.getLogger().setLevel(debug_levels[opts.debug_level])
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 logging.info("starting dbus service")
-manager = cnote.NotificationManager(themes.get_theme(opts.theme))
-service = cnote.NotificationService(manager)
-
-gtk.main()
+try:
+    manager = cnote.NotificationManager(themes.get_theme(opts.theme))
+    service = cnote.NotificationService(manager)
+    gtk.main()
+except dbus.DBusException as ex:
+    logging.error(ex)
+    print ex

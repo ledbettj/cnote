@@ -80,6 +80,10 @@ class NotificationService(dbus.service.Object):
     """
 
     def __init__(self, manager):
+        if dbus.SessionBus().name_has_owner(DBUS_BUS_NAME):
+            msg = '{0} already owned; exiting'.format(DBUS_BUS_NAME)
+            raise dbus.DBusException(msg)
+
         bus_name = dbus.service.BusName(DBUS_BUS_NAME,
                                         bus=dbus.SessionBus())
         dbus.service.Object.__init__(self, bus_name,

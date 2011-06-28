@@ -1,21 +1,63 @@
 {
-    "name": "ubuntu",
-    "author": "John Ledbetter <john.ledbetter@gmail.com>",
-    "version": "1.0",
-    "description": "based on Ubuntu's notify-osd appearance.",
-
-    "override": "default",
-
-    "colors": {
-        "background": [ 0.074, 0.074, 0.074, 0.80 ],
-        "body": [ 0.914, 0.914, 0.914, 1.0 ],
-        "shadow-urgency-0": [ 0.0, 0.0, 0.0, 0.8 ],
-        "shadow-urgency-1": [ 0.0, 0.0, 0.0, 0.8 ],
-        "shadow-urgency-2": [ 0.0, 0.0, 0.0, 0.8 ],
-        "title": [ 1.0, 1.0, 1.0, 1.0 ]
+    "metadata": {
+	"name": "ubuntu",
+	"author": "John Ledbetter <john.ledbetter@gmail.com>",
+	"version": "1.0",
+	"description": "notify-osd inspired theme"
     },
 
-    "force_location": true,
-    "shadow_width": 1,
-    "shadow_blur" : 12
+    "engine": "bubble",
+    "override": "default",
+
+    "location": {
+	"force": true
+    },
+
+    "shadow": {
+	"width": 1,
+	"blur": 12
+    },
+
+    "image": {
+	"opacity": 0.80
+    },
+
+    "urgency-0": {
+	"background-color": [0.074, 0.074, 0.074, 0.80],
+	"shadow-color": [0.0, 0.0, 0.0, 0.80],
+
+	"body-text": {
+	    "color": [0.914, 0.914, 0.914, 1.0]
+	},
+
+	"title-text": {
+	    "color": [1.0, 1.0, 1.0, 1.0]
+	}
+    },
+
+    "urgency-1": {
+	"background-color": [0.074, 0.074, 0.074, 0.80],
+	"shadow-color": [0.0, 0.0, 0.0, 0.80],
+
+	"body-text": {
+	    "color": [0.914, 0.914, 0.914, 1.0]
+	},
+
+	"title-text": {
+	    "color": [1.0, 1.0, 1.0, 1.0]
+	}
+    },
+
+    "urgency-2": {
+	"background-color": [0.074, 0.074, 0.074, 0.80],
+	"shadow-color": [0.0, 0.0, 0.0, 0.80],
+
+	"body-text": {
+	    "color": [0.914, 0.914, 0.914, 1.0]
+	},
+
+	"title-text": {
+	    "color": [1.0, 1.0, 1.0, 1.0]
+	}
+    }
 }

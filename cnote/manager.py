@@ -9,7 +9,7 @@ class NotificationManager:
         self.notifications = {}
         self.pending = []
         self.theme = theme
-        logging.debug("theme is '{0}'".format(theme.get('name')))
+        logging.debug("theme is '{0}'".format(theme.value('metadata','name')))
 
     def get_server_information(self):
         return ('cnote notification server',

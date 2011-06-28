@@ -42,5 +42,4 @@ following (pending an actual installation script/tool):
 
 themes for cnote are json files ending with '.cnote-theme'.  Themes can modify
 a notification's appearance in many ways, including colors, text style, size,
-and location.  See FORMAT as well as the existing themes in the 'theme'
-directory for details.
+and location.  See the existing themes in the 'theme' directory for details.

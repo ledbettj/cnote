@@ -25,7 +25,7 @@ class ThemeManager:
                              if f.endswith('.cnote-theme')]
                 for f in file_list:
                     theme = Theme(f)
-                    theme_name = theme['name']
+                    theme_name = theme['metadata']['name']
                     if theme_name not in self.themes:
                         self.themes[theme_name] = theme
                     else:
@@ -56,34 +56,48 @@ class ThemeManager:
 class Theme:
 
     def __init__(self, filename):
-        self.settings = {}
+        self.data = {}
         self.filename = filename
         self.base = None
         self.load()
 
+    def value(self, *args):
+        tbl = self.data
+        for a in args:
+            if a in tbl:
+                tbl = tbl[a]
+            else:
+                if self.base:
+                    return self.base.value(*args)
+                else:
+                    raise KeyError(','.join(args))
+
+        return tbl
+
     def get(self, k):
-        if k in self.settings:
-            return self.settings[k]
+        if k in self.data:
+            return self.data[k]
         elif self.base != None:
             return self.base.get(k)
         else:
-            m = "no key '{0}' in theme '{1}'".format(k, self.settings['name'])
+            m = "no key '{0}' in theme '{1}'".format(
+                k, self.data['metadata']['name'])
             logging.error(m)
             raise KeyError(m)
 
     def set(self, k, v):
-        self.settings[k] = v
+        self.data[k] = v
 
     def save(self):
         f = open(self.filename, 'w')
-        json.dump(self.settings, f, sort_keys=True, ident=' ' * 4)
+        json.dump(self.data, f, sort_keys=True, ident=' ' * 4)
         f.close()
 
     def load(self):
         f = open(self.filename, 'r')
 
         try:
-            self.settings = json.load(f)
+            self.data = json.load(f)
         except json.JSONDecodeError as err:
             logging.error("failed to load theme from {0}: {1}".format(
                     self.filename, err))
@@ -97,7 +111,7 @@ class Theme:
         self.set(key, value)
 
     def __contains__(self, key):
-        return key in self.settings or (self.base != None and key in self.base)
+        return key in self.data or (self.base != None and key in self.base)
 
     def set_base(self, parent):
         self.base = parent

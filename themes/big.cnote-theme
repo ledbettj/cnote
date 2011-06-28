@@ -1,51 +1,99 @@
 {
-    "name": "big",
-    "author": "John Ledbetter <john.ledbetter@gmail.com>",
-    "version": "1.0",
-    "description": "a big, ugly theme with notifications centered.",
+    "metadata": {
+	"name": "big",
+	"author": "John Ledbetter <john.ledbetter@gmail.com>",
+	"version": "1.0",
+	"description": "a big, ugly theme with notifications centered."
+    },
 
+    "engine": "bubbles",
     "override": "default",
 
-    "colors": {
-        "background": [ 1.0, 1.0, 1.0, 0.30 ],
-        "body": [ 0.0, 0.0, 0.0, 0.90 ],
-        "title": [ 0.0, 0.0, 0.0, 0.90 ],
-        "shadow-urgency-0": [ 0.0, 0.0, 0.0, 0.3 ],
-        "shadow-urgency-1": [ 0.0, 0.0, 0.0, 0.3 ],
-        "shadow-urgency-2": [ 0.0, 0.0, 0.0, 0.3 ]
+    "location": {
+	"force": true,
+	"gravity": 1,
+	"x": "(screen_x + screen_w - win_w) / 2",
+	"y": "(screen_y + screen_h - win_h) / 2"
     },
 
-    "force_location": true,
-    "location": [1, "(screen_x + screen_w - win_w) / 2",
-    		 "(screen_y + screen_h - win_h) / 2"],
-
-    "body_font": {
-        "family": "Sans",
-        "size": 16,
-        "stretch": 4,
-        "style": 0,
-        "variant": 0,
-        "weight": 400
-    },
-    "title_font": {
-        "family": "Sans",
-        "size": 18,
-        "stretch": 4,
-        "style": 0,
-        "variant": 0,
-        "weight": 700
+    "dimensions": {
+	"width": {
+	    "minimum": 480,
+	    "maximum": 480
+	},
+	"height": {
+	    "minimum": 144
+	},
+	"text-spacing": 8,
+	"padding": 10
     },
 
-    "min_width": 480,
-    "max_width": 480,
-    "min_height": 144,
-    "shadow_width": 2,
-    "shadow_blur" : 0,
-    "text_spacing": 8,
+    "shadow": {
+	"width": 2,
+	"blur": 0
+    },
 
-    "show_image": true,
-    "image_size": 128,
-    "image_opacity": 0.50,
+    "image": {
+	"visible": true,
+	"size": 128,
+	"opacity": 0.50
+    },
 
-    "padding": 10
+    "urgency-0": {
+        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
+        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
+	"body-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"size": 16
+	    }
+	},
+
+	"title-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"family": "Sans",
+		"size": 18,
+		"weight": 700
+	    }
+	}
+    },
+    "urgency-1": {
+        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
+        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
+	"body-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"size": 16
+	    }
+	},
+
+	"title-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"family": "Sans",
+		"size": 18,
+		"weight": 700
+	    }
+	}
+    },
+    "urgency-2": {
+        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
+        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
+	"body-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"size": 16
+	    }
+	},
+
+	"title-text": {
+	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "font": {
+		"family": "Sans",
+		"size": 18,
+		"weight": 700
+	    }
+	}
+    }
 }

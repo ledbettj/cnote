@@ -62,31 +62,20 @@ class Theme:
         self.load()
 
     def value(self, *args):
-        tbl = self.data
+        info = self['metadata']['name'] + ':/' + '/'.join(args)
+
+        item = self.data
         for a in args:
-            if a in tbl:
-                tbl = tbl[a]
+            if a in item:
+                item = item[a]
             else:
                 if self.base:
+                    logging.info('using parent for ' + info)
                     return self.base.value(*args)
                 else:
-                    raise KeyError(','.join(args))
+                    raise KeyError(info)
 
-        return tbl
-
-    def get(self, k):
-        if k in self.data:
-            return self.data[k]
-        elif self.base != None:
-            return self.base.get(k)
-        else:
-            m = "no key '{0}' in theme '{1}'".format(
-                k, self.data['metadata']['name'])
-            logging.error(m)
-            raise KeyError(m)
-
-    def set(self, k, v):
-        self.data[k] = v
+        return item
 
     def save(self):
         f = open(self.filename, 'w')
@@ -105,10 +94,10 @@ class Theme:
         f.close()
 
     def __getitem__(self, index):
-        return self.get(index)
+        return self.data[index]
 
     def __setitem__(self, key, value):
-        self.set(key, value)
+        self.data[key] = value
 
     def __contains__(self, key):
         return key in self.data or (self.base != None and key in self.base)

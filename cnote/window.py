@@ -182,6 +182,9 @@ class NotificationWindow(gtk.Window):
             cr.paint()
 
             bk = 'urgency-{0}'.format(self.n.urgency)
+            while 'same-as' in self.t.value(bk):
+                bk = self.t.value(bk, 'same-as')
+
             shad_w = self.t.value('shadow', 'width')
             # urgency-based drop shadow
             cr.set_source_rgba(*self.t.value(bk, 'shadow-color'))
@@ -262,7 +265,10 @@ class NotificationWindow(gtk.Window):
         min_height = self.t.value('dimensions', 'height', 'minimum')
         text_spacing = self.t.value('dimensions', 'text-spacing')
         text_width = max_width - 2 * text_spacing
+
         bk = 'urgency-{0}'.format(self.n.urgency)
+        while 'same-as' in self.t.value(bk):
+            bk = self.t.value(bk, 'same-as')
 
         if self.image != None:
             text_width -= text_spacing

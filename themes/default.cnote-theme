@@ -74,48 +74,10 @@
     },
 
     "urgency-1": {
-	"background-color": [0.74, 0.80, 0.84, 0.80],
-	"shadow-color": [0.0, 0.0, 0.0, 0.5],
-
-	"body-text": {
-	    "color": [1.0, 1.0, 1.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 7.2,
-		"weight": 400
-	    }
-	},
-
-	"title-text": {
-	    "color": [1.0, 1.0, 1.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 8.0,
-		"weight": 700
-	    }
-	}
+	"same-as": "urgency-0"
     },
 
     "urgency-2": {
-	"background-color": [0.74, 0.80, 0.84, 0.80],
-	"shadow-color": [0.0, 0.0, 0.0, 0.5],
-
-	"body-text": {
-	    "color": [1.0, 1.0, 1.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 7.2,
-		"weight": 400
-	    }
-	},
-
-	"title-text": {
-	    "color": [1.0, 1.0, 1.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 8.0,
-		"weight": 700
-	    }
-	}
+	"same-as": "urgency-0"
     }
 }

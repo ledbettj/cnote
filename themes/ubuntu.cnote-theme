@@ -36,28 +36,10 @@
     },
 
     "urgency-1": {
-	"background-color": [0.074, 0.074, 0.074, 0.80],
-	"shadow-color": [0.0, 0.0, 0.0, 0.80],
-
-	"body-text": {
-	    "color": [0.914, 0.914, 0.914, 1.0]
-	},
-
-	"title-text": {
-	    "color": [1.0, 1.0, 1.0, 1.0]
-	}
+	"same-as": "urgency-0"
     },
 
     "urgency-2": {
-	"background-color": [0.074, 0.074, 0.074, 0.80],
-	"shadow-color": [0.0, 0.0, 0.0, 0.80],
-
-	"body-text": {
-	    "color": [0.914, 0.914, 0.914, 1.0]
-	},
-
-	"title-text": {
-	    "color": [1.0, 1.0, 1.0, 1.0]
-	}
+	"same-as": "urgency-1"
     }
 }

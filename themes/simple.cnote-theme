@@ -8,6 +8,13 @@
     "engine": "bubbles",
     "override": "default",
 
+    "location": {
+	"force": false,
+	"gravity": 3,
+	"x": "screen_x + screen_w - win_w - 12",
+	"y": "screen_y + 12"
+    },
+
     "shadow": {
 	"width": 0,
 	"blur": 0
@@ -28,21 +35,10 @@
 	}
     },
     "urgency-1": {
-	"background-color": [ 0.74, 0.80, 0.84, 1.0 ],
-	"body-text": {
-	    "color": [ 1.0, 1.0, 1.0, 1.0 ]
-	},
-	"title-text": {
-	    "color": [ 1.0, 1.0, 1.0, 1.0 ]
-	}
+	"same-as": "urgency-0"
     },
+
     "urgency-2": {
-	"background-color": [ 0.74, 0.80, 0.84, 1.0 ],
-	"body-text": {
-	    "color": [ 1.0, 1.0, 1.0, 1.0 ]
-	},
-	"title-text": {
-	    "color": [ 1.0, 1.0, 1.0, 1.0 ]
-	}
+	"same-as": "urgency-0"
     }
 }

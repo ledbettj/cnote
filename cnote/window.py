@@ -64,6 +64,7 @@ class NotificationWindow(gtk.Window):
         self.image = None
 
         self.surface = None
+
         self.regenerate()
 
     def fix_timeout(self):
@@ -116,11 +117,14 @@ class NotificationWindow(gtk.Window):
     def show(self):
         self.start_timer()
         super(NotificationWindow, self).show()
+
+    def do_expose_event(self, arg):
+
         # allow notifications to be 'click through'
         if self.t.value('miscellaneous', 'click-through'):
             self.window.input_shape_combine_region(gtk.gdk.Region(), 0, 0)
+            logging.debug('setting empty region as our region')
 
-    def do_expose_event(self, arg):
         cr = self.window.cairo_create()
         cr.rectangle(arg.area.x, arg.area.y, arg.area.width, arg.area.height)
         cr.clip()

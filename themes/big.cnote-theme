@@ -13,7 +13,7 @@
 	"force": true,
 	"gravity": 1,
 	"x": "(screen_x + screen_w - win_w) / 2",
-	"y": "(screen_y + screen_h - win_h) / 2"
+	"y": "screen_y + 24"
     },
 
     "dimensions": {
@@ -22,78 +22,51 @@
 	    "maximum": 480
 	},
 	"height": {
-	    "minimum": 144
+	    "minimum": 160
 	},
-	"text-spacing": 8,
+	"text-spacing": 16,
 	"padding": 10
     },
 
     "shadow": {
 	"width": 2,
-	"blur": 0
+	"blur": 12
     },
 
     "image": {
 	"visible": true,
 	"size": 128,
-	"opacity": 0.50
+	"opacity": 0.60
+    },
+
+    "miscellaneous": {
+	"click-through": true
     },
 
     "urgency-0": {
-        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
-        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
+        "background-color": [ 0.074, 0.074, 0.074, 0.50 ],
+        "shadow-color": [ 0.0, 0.0, 0.0, 0.70 ],
 	"body-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "color": [0.9, 0.9, 0.9, 0.90],
 	    "font": {
-		"size": 16
+		"family": "Bitstream Vera Sans",
+		"size": 14
 	    }
 	},
 
 	"title-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
+	    "color": [1.0, 1.0, 1.0, 0.90],
 	    "font": {
-		"family": "Sans",
-		"size": 18,
+		"family": "Bitstream Vera Sans",
+		"size": 16,
 		"weight": 700
 	    }
 	}
     },
     "urgency-1": {
-        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
-        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
-	"body-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
-	    "font": {
-		"size": 16
-	    }
-	},
-
-	"title-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 18,
-		"weight": 700
-	    }
-	}
+	"same-as": "urgency-0"
     },
     "urgency-2": {
-        "background-color": [ 1.0, 1.0, 1.0, 0.30 ],
-        "shadow-color": [ 0.0, 0.0, 0.0, 0.3 ],
-	"body-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
-	    "font": {
-		"size": 16
-	    }
-	},
-
-	"title-text": {
-	    "color": [0.0, 0.0, 0.0, 0.90],
-	    "font": {
-		"family": "Sans",
-		"size": 18,
-		"weight": 700
-	    }
-	}
+	"same-as": "urgency-0"
     }
 }

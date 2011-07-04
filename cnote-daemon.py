@@ -55,9 +55,9 @@ if opts.list_themes:
         print("* {0}-{2}\n"
               "    author: {1}\n"
               "    info:   {3}\n".format(tn,
-                                         t['author'],
-                                         t['version'],
-                                         t['description']))
+                                         t.value('metadata', 'author'),
+                                         t.value('metadata', 'version'),
+                                         t.value('metadata', 'description')))
     sys.exit(0)
 
 if opts.replace:

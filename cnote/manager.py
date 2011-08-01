@@ -69,3 +69,6 @@ class NotificationManager:
         self.pending.remove(nid)
         self.srv.NotificationClosed(nid, reason)
         self.show_next_notification()
+
+    def select_theme(self, theme_name):
+        self.themes.select_theme(theme_name)

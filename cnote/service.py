@@ -129,3 +129,10 @@ class NotificationService(dbus.service.Object):
     @dbus.service.signal(DBUS_BUS_NAME, signature='us')
     def ActionInvoked(self, nid, action_key):
         pass
+
+    # additional cnote-specific methods
+    @dbus.service.method(DBUS_BUS_NAME,
+                         in_signature='s',
+                         out_signature='')
+    def SelectTheme(self, theme_name):
+        self.mgr.select_theme(theme_name)

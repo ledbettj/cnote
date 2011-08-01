@@ -25,7 +25,8 @@ class ThemeManager:
         self.active = None
 
     def select_theme(self, name):
-        self.active = name
+        if name in self.themes:
+            self.active = name
 
     def get_active(self):
         return self.themes[self.active]

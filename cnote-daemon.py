@@ -68,7 +68,8 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
 logging.info("starting dbus service")
 try:
-    manager = cnote.NotificationManager(themes.get_theme(opts.theme))
+    themes.select_theme(opts.theme)
+    manager = cnote.NotificationManager(themes)
     service = cnote.NotificationService(manager)
     gtk.main()
 except dbus.DBusException as ex:

@@ -3,13 +3,12 @@ import cnote
 
 
 class NotificationManager:
-    def __init__(self, theme):
+    def __init__(self, themes):
         self.next_id = 1
         self.srv = None
         self.notifications = {}
         self.pending = []
-        self.theme = theme
-        logging.debug("theme is '{0}'".format(theme.value('metadata','name')))
+        self.themes = themes
 
     def get_server_information(self):
         return ('cnote notification server',
@@ -27,7 +26,9 @@ class NotificationManager:
 
         logging.debug('new {0}'.format(n))
 
-        self.notifications[nid] = cnote.NotificationWindow(n, self.theme)
+        self.notifications[nid] = cnote.NotificationWindow(
+            n, self.themes.get_active())
+
         self.pending.append(nid)
         if len(self.pending) == 1:
             self.show_next_notification()

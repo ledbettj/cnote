@@ -2,6 +2,8 @@ import simplejson as json
 import os
 import logging
 import xdg.BaseDirectory
+import inotifyx
+import glib
 
 
 class ThemeManager:
@@ -17,6 +19,16 @@ class ThemeManager:
         self.base_dirs = base_dirs
         self.themes = {}
         self.load_themes()
+        self.watches = {}
+        self.watch_fd = None
+        self.install_watcher()
+        self.active = None
+
+    def select_theme(self, name):
+        self.active = name
+
+    def get_active(self):
+        return self.themes[self.active]
 
     def load_themes(self):
         for base_dir in self.base_dirs:
@@ -32,6 +44,33 @@ class ThemeManager:
                         logging.warning(
                             "ignoring duplicate theme {0}".format(theme_name))
         self.resolve_bases()
+
+    def install_watcher(self):
+        self.watch_fd = inotifyx.init()
+        for d in self.base_dirs:
+            if os.path.isdir(d):
+                logging.info('adding watch for {0}'.format(d))
+                self.watches[inotifyx.add_watch(self.watch_fd, d,
+                                                inotifyx.IN_MODIFY |
+                                                inotifyx.IN_CREATE)] = d
+
+        glib.timeout_add_seconds(3, self.do_watch)
+
+    def do_watch(self):
+        events = inotifyx.get_events(self.watch_fd, 0)
+        if events != None:
+            filt = [e for e in events if (not e.name.startswith('.') and
+                                          e.name.endswith('.cnote-theme'))]
+            for e in filt:
+                path = os.path.join(self.watches[e.wd], e.name)
+                logging.info('reloading: {0}: {1}'.format(
+                        path, e.get_mask_description()))
+                t = Theme(path)
+                tname = t['metadata']['name']
+                self.themes[tname] = t
+                self.resolve_bases()
+
+        return 1
 
     def resolve_bases(self):
         for theme_name in self.themes:
@@ -70,7 +109,7 @@ class Theme:
                 item = item[a]
             else:
                 if self.base:
-                    logging.info('using parent for ' + info)
+                    logging.debug('using parent for ' + info)
                     return self.base.value(*args)
                 else:
                     raise KeyError(info)

@@ -6,6 +6,9 @@ DBUS_OBJ_PATH = '/org/freedesktop/Notifications'
 
 
 class Notification:
+    """
+    Contains all the data associated with an on-screen notification.
+    """
 
     # reasons a notification might have been closed
     CLOSED_EXPIRED   = 1
@@ -32,6 +35,8 @@ class Notification:
         self.summary = summary
         self.body = body
         self.actions = []
+        # unpack the [value, text, value, text, ..] action list
+        # into a list of tuples
         for value, localized in zip(actions[0::2], actions[1::2]):
             self.actions.append((str(value), str(localized)))
         self.hints = hints
@@ -43,6 +48,7 @@ class Notification:
         self.resident = False
         self.location = self.DEFAULT_LOCATION
         self.timeout = int(timeout)
+
         # unpack any hints we might handle
         if 'urgency' in hints:
             self.urgency = int(hints['urgency'])

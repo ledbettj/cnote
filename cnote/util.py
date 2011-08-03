@@ -4,7 +4,12 @@ import math
 import gtk
 import logging
 
+
 def strip_markup(text):
+    """
+    Removes any pango-esque markup from the provided text.
+    """
+
     text = re.sub('<[^<]+?>', '', text)
     # the below doesn't seem to handle '&apos;'
     text = re.sub('&apos;', "'", text)
@@ -31,6 +36,10 @@ def strip_markup(text):
 
 
 def cairo_rounded_rect(cr, aspect, x, y, corner_radius, width, height):
+    """
+    Given a Cairo context, draws a rounded rectangle at (x,y) with dimensions
+    (width, height) and rounded corners with the 'aspect' and 'corner_radius'.
+    """
     radius = float(corner_radius) / aspect
 
     cr.move_to(x + radius, y)
@@ -69,6 +78,11 @@ def cairo_rounded_rect(cr, aspect, x, y, corner_radius, width, height):
 
 
 def load_pixbuf_fromname(filename, size):
+    """
+    Create a pixbuf from the given filename with the specified side length.
+    If the filename starts with file:// or appears to be a path, the pixbuf
+    is loaded from the file.  Otherwise, the current GTK icon theme is used.
+    """
     if filename.startswith('file://'):
         filename = filename[7:]
 
@@ -87,6 +101,11 @@ def load_pixbuf_fromname(filename, size):
 
 
 def load_pixbuf_fromdata(data, size):
+    """
+    Given an array of values in the format specified in the desktop
+    notification specification, create and return a pixbuf with the given
+    side length.
+    """
     width  = int(data[0])
     height = int(data[1])
     rowstride = int(data[2])
@@ -118,6 +137,10 @@ def load_pixbuf_fromdata(data, size):
 
 
 def scale_pixbuf(pixbuf, size):
+    """
+    Given a pixbuf, scale it to a square with side length 'size', preserving
+    aspect ratio and centering the result.
+    """
     w = pixbuf.get_width()
     h = pixbuf.get_height()
 

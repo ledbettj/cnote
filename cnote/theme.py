@@ -38,6 +38,8 @@ class ThemeManager:
                              if f.endswith('.cnote-theme')]
                 for f in file_list:
                     theme = Theme(f)
+                    if not theme.success:
+                        continue
                     theme_name = theme['metadata']['name']
                     if theme_name not in self.themes:
                         self.themes[theme_name] = theme
@@ -67,6 +69,8 @@ class ThemeManager:
                 logging.info('reloading: {0}: {1}'.format(
                         path, e.get_mask_description()))
                 t = Theme(path)
+                if not t.success:
+                    continue
                 tname = t['metadata']['name']
                 self.themes[tname] = t
                 self.resolve_bases()
@@ -99,6 +103,7 @@ class Theme:
         self.data = {}
         self.filename = filename
         self.base = None
+        self.success = False
         self.load()
 
     def value(self, *args):
@@ -127,6 +132,7 @@ class Theme:
 
         try:
             self.data = json.load(f)
+            self.success = True
         except json.JSONDecodeError as err:
             logging.error("failed to load theme from {0}: {1}".format(
                     self.filename, err))
